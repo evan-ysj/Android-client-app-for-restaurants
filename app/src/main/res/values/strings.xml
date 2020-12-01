@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="title_home">Home</string>
+    <string name="title_waitlist">Waitlist</string>
+    <string name="title_reservation">Reservation</string>
+    <string name="title_personal">Personal</string>
+    <string name="hint_number_of_guest">Number of Guest</string>
+    <string name="hint_select_date">Pick a Date</string>
+    <string name="hint_lastname">Lastname</string>
+    <string name="hint_date">Pick a Date</string>
+    <string name="hint_email" translatable="false">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_firstname">Firstname</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="title_wait_state">Waiting Status</string>
+    <string name="title_reserve_table">New Reservation</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
