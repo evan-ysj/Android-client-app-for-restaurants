@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_navigation_home_to_navigation_reservation"
             app:destination="@id/navigation_reservation" />
+        <action
+            android:id="@+id/action_navigation_home_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment
@@ -42,9 +45,6 @@
         <action
             android:id="@+id/action_navigation_reservation_to_navigation_reserve_table"
             app:destination="@id/navigation_reserve_table" />
-        <action
-            android:id="@+id/action_navigation_reservation_to_loginFragment"
-            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment
@@ -65,7 +65,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.myapplication.ui.login.LoginFragment"
-        android:label="LoginFragment" >
+        android:label="@string/title_login" >
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
@@ -73,5 +73,5 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.myapplication.ui.login.RegisterFragment"
-        android:label="RegisterFragment" />
+        android:label="@string/title_register" />
 </navigation>

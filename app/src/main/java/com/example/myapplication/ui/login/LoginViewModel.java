@@ -11,10 +11,10 @@ public class LoginViewModel extends ViewModel {
 
     public LoginViewModel() {
         mTextLogin = new MutableLiveData<>();
-        mTextLogin.setValue("Please Login with Email Address");
+        mTextLogin.setValue("Please Sign in with Username or Email");
 
         mTextRegister = new MutableLiveData<>();
-        mTextRegister.setValue("Sign in with Following Information");
+        mTextRegister.setValue("Sign up with Following Information");
     }
 
     public LiveData<String> getTextLogin() {

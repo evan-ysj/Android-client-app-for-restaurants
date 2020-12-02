@@ -17,4 +17,6 @@
     <string name="title_reserve_table">New Reservation</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_login">Sign In</string>
+    <string name="title_register">Sign Up</string>
 </resources>

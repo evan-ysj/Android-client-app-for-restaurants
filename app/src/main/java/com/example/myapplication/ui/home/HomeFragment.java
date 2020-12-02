@@ -18,6 +18,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.myapplication.R;
+import com.example.myapplication.service.Session;
 import com.example.myapplication.ui.waitlist.WaitlistFragment;
 
 public class HomeFragment extends Fragment {
@@ -43,8 +44,14 @@ public class HomeFragment extends Fragment {
         reserveTable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v)
-                        .navigate(R.id.action_navigation_home_to_navigation_reservation);
+                Session session = Session.getInstance();
+                if(session.getUserid() == -1) {
+                    Navigation.findNavController(v)
+                            .navigate(R.id.action_navigation_home_to_loginFragment);
+                } else {
+                    Navigation.findNavController(v)
+                            .navigate(R.id.action_navigation_home_to_navigation_reservation);
+                }
             }
         });
         return root;

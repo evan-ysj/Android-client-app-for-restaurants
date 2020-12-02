@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.myapplication.R;
+import com.example.myapplication.service.Session;
 
 public class ReservationFragment extends Fragment {
 
@@ -37,4 +38,5 @@ public class ReservationFragment extends Fragment {
         });
         return root;
     }
+
 }
