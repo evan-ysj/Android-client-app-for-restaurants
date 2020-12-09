@@ -6,16 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.myapplication.R;
-import com.example.myapplication.service.Session;
+import com.example.myapplication.model.User;
 
 public class ReservationFragment extends Fragment {
 
@@ -37,6 +37,16 @@ public class ReservationFragment extends Fragment {
             }
         });
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        User user = User.getInstance();
+        if(user.getUserid() == -1) {
+            Toast.makeText(getActivity(), "Please sign in!", Toast.LENGTH_LONG).show();
+            Navigation.findNavController(view).navigate(R.id.loginFragment);
+        }
     }
 
 }

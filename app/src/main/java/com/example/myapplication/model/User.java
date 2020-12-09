@@ -1,9 +1,9 @@
-package com.example.myapplication.service;
+package com.example.myapplication.model;
 
-public class Session {
+public class User {
 
-    private static class SessionHolder {
-        private static final Session INSTANCE = new Session();
+    private static class InstanceHolder {
+        private static final User INSTANCE = new User();
     }
 
     private int userid;
@@ -12,16 +12,12 @@ public class Session {
     private String lastname;
     private String email;
 
-    private Session() {
-        this.userid = -1;
-        this.username = "";
-        this.firstname = "";
-        this.lastname = "";
-        this.email = "";
+    private User() {
+        clear();
     }
 
-    public static Session getInstance() {
-        return SessionHolder.INSTANCE;
+    public static User getInstance() {
+        return InstanceHolder.INSTANCE;
     }
 
     public int getUserid() {
@@ -62,5 +58,13 @@ public class Session {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void clear() {
+        this.userid = -1;
+        this.username = "";
+        this.firstname = "";
+        this.lastname = "";
+        this.email = "";
     }
 }

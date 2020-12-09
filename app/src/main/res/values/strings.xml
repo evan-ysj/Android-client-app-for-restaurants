@@ -8,7 +8,7 @@
     <string name="hint_select_date">Pick a Date</string>
     <string name="hint_lastname">Lastname</string>
     <string name="hint_date">Pick a Date</string>
-    <string name="hint_email" translatable="false">Email</string>
+    <string name="hint_email" translatable="false">Username/Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_username">Username</string>
     <string name="hint_firstname">Firstname</string>

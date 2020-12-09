@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,17 +8,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.myapplication.R;
-import com.example.myapplication.service.Session;
-import com.example.myapplication.ui.waitlist.WaitlistFragment;
 
 public class HomeFragment extends Fragment {
 
@@ -44,14 +37,8 @@ public class HomeFragment extends Fragment {
         reserveTable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Session session = Session.getInstance();
-                if(session.getUserid() == -1) {
-                    Navigation.findNavController(v)
-                            .navigate(R.id.action_navigation_home_to_loginFragment);
-                } else {
-                    Navigation.findNavController(v)
-                            .navigate(R.id.action_navigation_home_to_navigation_reservation);
-                }
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_navigation_home_to_navigation_reservation);
             }
         });
         return root;
