@@ -31,14 +31,15 @@ public class RegisterFragment extends Fragment {
 
     private LoginViewModel loginlViewModel;
     private final List<EditText> tvRegisterInfos = new ArrayList<>();;
-    private final Fragment current = this;
+    private View root;
     private Toast toast;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         loginlViewModel =
-                new ViewModelProvider(this).get(LoginViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_register, container, false);
+                new ViewModelProvider(this, new LoginViewModel.Factory(requireActivity().getApplication()))
+                        .get(LoginViewModel.class);
+        root = inflater.inflate(R.layout.fragment_register, container, false);
 
         final TextView textView = root.findViewById(R.id.text_register);
         loginlViewModel.getTextRegister().observe(getViewLifecycleOwner(), s -> textView.setText(s));
@@ -122,7 +123,7 @@ public class RegisterFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                NavHostFragment.findNavController(current).popBackStack();
+                Navigation.findNavController(root).popBackStack();
             }
         });
     }

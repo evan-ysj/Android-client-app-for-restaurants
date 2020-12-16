@@ -1,36 +1,38 @@
 package com.example.myapplication.ui.login;
 
+import android.app.Application;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myapplication.InitDB;
 import com.example.myapplication.NetworkUtils;
-import com.example.myapplication.model.User;
 import com.example.myapplication.service.Repository;
-import com.google.gson.Gson;
+import com.example.myapplication.service.UserBuffer;
 
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 
 public class LoginViewModel extends ViewModel {
 
     private final MutableLiveData<String> mTextLogin;
     private final MutableLiveData<String> mTextRegister;
+    private final Repository mRepository;
 
-    public LoginViewModel() {
+    public LoginViewModel(@NonNull Application application) {
         mTextLogin = new MutableLiveData<>();
         mTextLogin.setValue("Please Sign in with Username or Email");
         mTextRegister = new MutableLiveData<>();
         mTextRegister.setValue("Sign up with Following Information");
+        mRepository = InitDB.getRepository(application);
     }
 
     public LiveData<String> getTextLogin() {
@@ -51,7 +53,7 @@ public class LoginViewModel extends ViewModel {
                 .post(body)
                 .build();
         Log.e("status: ", "request sent");
-        return NetworkUtils.getResponse(request, User.class);
+        return NetworkUtils.getResponse(request, UserBuffer.class, mRepository);
     }
 
     public NetworkUtils.RESPONSE_CODE registerServer(List<String> params) {
@@ -68,6 +70,20 @@ public class LoginViewModel extends ViewModel {
                 .post(body)
                 .build();
         Log.e("status: ", "request sent");
-        return NetworkUtils.getResponse(request, User.class);
+        return NetworkUtils.getResponse(request, UserBuffer.class, mRepository);
+    }
+
+    public static class Factory extends ViewModelProvider.NewInstanceFactory {
+        private Application mApplication;
+
+        public Factory(Application application) {
+            mApplication = application;
+        }
+
+        @NotNull
+        @Override
+        public <T extends ViewModel> T create(Class<T> modelClass) {
+            return (T) new LoginViewModel(mApplication);
+        }
     }
 }

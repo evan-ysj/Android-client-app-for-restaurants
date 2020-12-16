@@ -16,16 +16,17 @@ import androidx.navigation.Navigation;
 
 import com.example.myapplication.R;
 import com.example.myapplication.model.User;
+import com.example.myapplication.service.Repository;
 
 public class PersonalFragment extends Fragment {
 
     private PersonalViewModel personalViewModel;
-    private User user = User.getInstance();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         personalViewModel =
-                new ViewModelProvider(this).get(PersonalViewModel.class);
+                new ViewModelProvider(this, new PersonalViewModel.Factory(requireActivity().getApplication()))
+                        .get(PersonalViewModel.class);
         View root = inflater.inflate(R.layout.fragment_personal, container, false);
         final TextView textView = root.findViewById(R.id.text_personal);
         personalViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
@@ -38,18 +39,18 @@ public class PersonalFragment extends Fragment {
         final TextView emailKey = root.findViewById(R.id.text_email_key);
         personalViewModel.getEmailKey().observe(getViewLifecycleOwner(), s -> emailKey.setText(s));
         TextView usernameValue = root.findViewById(R.id.text_username_value);
-        personalViewModel.getUsernameValue().observe(getViewLifecycleOwner(), s -> usernameValue.setText(s));
+        personalViewModel.getUser().observe(getViewLifecycleOwner(), s -> usernameValue.setText(s.getUsername()));
         TextView firstnameValue = root.findViewById(R.id.text_firstname_value);
-        personalViewModel.getFirstnameValue().observe(getViewLifecycleOwner(), s -> firstnameValue.setText(s));
+        personalViewModel.getUser().observe(getViewLifecycleOwner(), s -> firstnameValue.setText(s.getFirstname()));
         TextView lastnameValue = root.findViewById(R.id.text_lastname_value);
-        personalViewModel.getLastnameValue().observe(getViewLifecycleOwner(), s -> lastnameValue.setText(s));
+        personalViewModel.getUser().observe(getViewLifecycleOwner(), s -> lastnameValue.setText(s.getLastname()));
         TextView emailValue = root.findViewById(R.id.text_email_value);
-        personalViewModel.getEmailValue().observe(getViewLifecycleOwner(), s -> emailValue.setText(s));
+        personalViewModel.getUser().observe(getViewLifecycleOwner(), s -> emailValue.setText(s.getEmail()));
         final Button logout = root.findViewById(R.id.personal_logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user.clear();
+                personalViewModel.clearUser();
                 Navigation.findNavController(root).navigate(R.id.navigation_home);
             }
         });
@@ -59,10 +60,9 @@ public class PersonalFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(user.getUserid() == -1) {
-            Toast.makeText(getActivity(), "Please sign in!", Toast.LENGTH_LONG).show();
-            Navigation.findNavController(view).navigate(R.id.loginFragment);
+        if(personalViewModel.getUser().getValue().getUserId() == -1) {
+            Toast.makeText(getActivity(), "Please sign in!", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(view).navigate(R.id.action_navigation_personal_to_loginFragment);
         }
-        personalViewModel.setValues();
     }
 }

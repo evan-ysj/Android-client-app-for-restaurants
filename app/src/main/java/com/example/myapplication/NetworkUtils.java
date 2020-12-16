@@ -1,10 +1,12 @@
 package com.example.myapplication;
 
+import android.app.Application;
 import android.util.Log;
 
-import com.example.myapplication.model.User;
-import com.example.myapplication.model.Waitlist;
+import com.example.myapplication.service.DataBuffer;
 import com.example.myapplication.service.Repository;
+import com.example.myapplication.service.UserBuffer;
+import com.example.myapplication.service.WaitlistBuffer;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -24,17 +26,18 @@ public class NetworkUtils {
         FAIL,
         SUCCESS
     }
-    public static String MESSAGE = "";
+    public static String MESSAGE = "empty";
+    public static int CODE = 0;
     public static final ReentrantLock lock = new ReentrantLock();
 
-    public static RESPONSE_CODE getResponse(Request request, Class model) {
+    public static RESPONSE_CODE getResponse(Request request, Class bufferClass, Repository repository) {
         OkHttpClient client = new OkHttpClient();
         final RESPONSE_CODE[] responseCode = {RESPONSE_CODE.PROCESSING};
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("status: ", e.toString());
-                responseCode[0] = NetworkUtils.RESPONSE_CODE.NO_RESPONSE;
+                responseCode[0] = RESPONSE_CODE.NO_RESPONSE;
                 Log.e("status: ", responseCode[0].toString());
             }
 
@@ -42,21 +45,26 @@ public class NetworkUtils {
             public void onResponse(Call call, Response response) throws IOException {
                 final String data = response.body().string();
                 Log.e("status: ", data);
-                Log.e("status: ", "new thread");
                 Gson gson = new Gson();
-                Repository repository = gson.fromJson(data, Repository.class);
-                if(model == User.class) repository.loadUser();
-                else if(model == Waitlist.class) repository.loadWaitlist();
-                NetworkUtils.MESSAGE = repository.getMessage();
-                if(repository.get_$StatusCode185() == 200) {
-                    Log.e("status: ", repository.getMessage());
-                    responseCode[0] = NetworkUtils.RESPONSE_CODE.SUCCESS;
+                DataBuffer buffer = new DataBuffer();
+                if(bufferClass == UserBuffer.class) {
+                    buffer = gson.fromJson(data, UserBuffer.class);
+                } else if(bufferClass == WaitlistBuffer.class) {
+                    buffer = gson.fromJson(data, WaitlistBuffer.class);
                 }
-                else responseCode[0] = NetworkUtils.RESPONSE_CODE.FAIL;
+                buffer.update(repository);
+                if(CODE == 200) {
+                    Log.e("status: ", MESSAGE);
+                    responseCode[0] = RESPONSE_CODE.SUCCESS;
+                }
+                else {
+                    Log.e("status: ", MESSAGE);
+                    responseCode[0] = RESPONSE_CODE.FAIL;
+                }
             }
         });
         // Wait for thread complete; Should add time out later.
-        while(responseCode[0] == NetworkUtils.RESPONSE_CODE.PROCESSING) {
+        while(responseCode[0] == RESPONSE_CODE.PROCESSING) {
             Log.e("status", "waiting for process");
         }
         return responseCode[0];

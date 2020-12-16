@@ -12,9 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -43,7 +41,8 @@ public class WaitlistFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         waitlistViewModel =
-                new ViewModelProvider(this).get(WaitlistViewModel.class);
+                new ViewModelProvider(this, new WaitlistViewModel.Factory(requireActivity().getApplication()))
+                        .get(WaitlistViewModel.class);
         View root = inflater.inflate(R.layout.fragment_waitlist, container, false);
         final TextView textView = root.findViewById(R.id.text_waitlist);
         waitlistViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
@@ -104,8 +103,9 @@ public class WaitlistFragment extends Fragment {
     }
 
     private void checkWaitState() {
-        int waitId = Waitlist.getInstance().getId();
-        String waitCategory = Waitlist.getInstance().getCategory();
+        int waitId = waitlistViewModel.getWaitId();
+        String waitCategory = waitlistViewModel.getWaitCategory();
+        Log.e("waitlist:", waitCategory + waitId);
         if(waitId < 0) {
             toast.setText("Please take a number first!");
             toast.show();

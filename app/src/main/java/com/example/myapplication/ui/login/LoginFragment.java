@@ -19,29 +19,29 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.NetworkUtils;
 import com.example.myapplication.R;
-import com.example.myapplication.model.User;
 
 public class LoginFragment extends Fragment {
 
-    private LoginViewModel loginlViewModel;
+    private LoginViewModel loginViewModel;
+    private View root;
     private EditText tvUserName;
     private EditText tvPassword;
-    private final Fragment current = this;
     private Toast toast;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        loginlViewModel =
-                new ViewModelProvider(this).get(LoginViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_login, container, false);
+        loginViewModel =
+                new ViewModelProvider(this, new LoginViewModel.Factory(requireActivity().getApplication()))
+                        .get(LoginViewModel.class);
+        root = inflater.inflate(R.layout.fragment_login, container, false);
 
         final TextView textView = root.findViewById(R.id.text_login);
-        loginlViewModel.getTextLogin().observe(getViewLifecycleOwner(), s -> textView.setText(s));
+        loginViewModel.getTextLogin().observe(getViewLifecycleOwner(), s -> textView.setText(s));
 
         tvUserName = root.findViewById(R.id.login_email);
         tvPassword = root.findViewById(R.id.login_passwd);
 
-        toast = Toast.makeText(getActivity(), "", Toast.LENGTH_LONG);
+        toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
 
         Button signUp = root.findViewById(R.id.login_signup);
         signUp.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +76,7 @@ public class LoginFragment extends Fragment {
             return;
         }
 
-        NetworkUtils.RESPONSE_CODE responseCode = loginlViewModel.loginServer(tvUserNameString, tvPasswordString);
+        NetworkUtils.RESPONSE_CODE responseCode = loginViewModel.loginServer(tvUserNameString, tvPasswordString);
 
         if(responseCode == NetworkUtils.RESPONSE_CODE.SUCCESS) {
             toast.setText(NetworkUtils.MESSAGE);
@@ -99,7 +99,7 @@ public class LoginFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                NavHostFragment.findNavController(current).popBackStack();
+                Navigation.findNavController(root).popBackStack();
             }
         });
     }

@@ -20,43 +20,31 @@ public class User {
         return InstanceHolder.INSTANCE;
     }
 
-    public int getUserid() {
-        return this.userid;
-    }
-
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public int getUserId() {
+        return userid;
     }
 
     public String getUsername() {
-        return this.username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+        return username;
     }
 
     public String getFirstname() {
-        return this.firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+        return firstname;
     }
 
     public String getLastname() {
-        return this.lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+        return lastname;
     }
 
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
-    public void setEmail(String email) {
+    public void update(int userid, String username, String firstname, String lastname, String email) {
+        this.userid = userid;
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
     }
 

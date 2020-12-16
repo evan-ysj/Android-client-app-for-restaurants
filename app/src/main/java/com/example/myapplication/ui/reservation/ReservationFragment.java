@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 
 import com.example.myapplication.R;
 import com.example.myapplication.model.User;
+import com.example.myapplication.service.Repository;
 
 public class ReservationFragment extends Fragment {
 
@@ -24,7 +25,8 @@ public class ReservationFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         reservationViewModel =
-                new ViewModelProvider(this).get(ReservationViewModel.class);
+                new ViewModelProvider(this, new ReservationViewModel.Factory(requireActivity().getApplication()))
+                        .get(ReservationViewModel.class);
         View root = inflater.inflate(R.layout.fragment_reservation, container, false);
         final TextView textView = root.findViewById(R.id.text_reservation);
         reservationViewModel.getTextReserveRecord().observe(getViewLifecycleOwner(), s -> textView.setText(s));
@@ -42,10 +44,9 @@ public class ReservationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        User user = User.getInstance();
-        if(user.getUserid() == -1) {
-            Toast.makeText(getActivity(), "Please sign in!", Toast.LENGTH_LONG).show();
-            Navigation.findNavController(view).navigate(R.id.loginFragment);
+        if(reservationViewModel.getUser().getValue().getUserId() == -1) {
+            Toast.makeText(getActivity(), "Please sign in!", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(view).navigate(R.id.action_navigation_reservation_to_loginFragment);
         }
     }
 

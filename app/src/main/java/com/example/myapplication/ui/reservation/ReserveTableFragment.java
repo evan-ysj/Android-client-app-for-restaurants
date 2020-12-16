@@ -21,7 +21,8 @@ public class ReserveTableFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         reservationViewModel =
-                new ViewModelProvider(this).get(ReservationViewModel.class);
+                new ViewModelProvider(this, new ReservationViewModel.Factory(requireActivity().getApplication()))
+                        .get(ReservationViewModel.class);
         View root = inflater.inflate(R.layout.fragment_reserve_table, container, false);
         final TextView textView = root.findViewById(R.id.text_reserve_table);
         reservationViewModel.getTextReserveTable().observe(getViewLifecycleOwner(), s -> textView.setText(s));

@@ -1,39 +1,41 @@
 package com.example.myapplication.ui.waitlist;
 
+import android.app.Application;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myapplication.InitDB;
 import com.example.myapplication.NetworkUtils;
-import com.example.myapplication.model.Waitlist;
 import com.example.myapplication.service.Repository;
-import com.google.gson.Gson;
+import com.example.myapplication.service.WaitlistBuffer;
 
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 
 public class WaitlistViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
     private MutableLiveData<String> mTextCheckState;
+    private final Repository mRepository;
 
-    public WaitlistViewModel() {
+    public WaitlistViewModel(@NonNull Application application) {
         mText = new MutableLiveData<>();
         mText.setValue("Take a Number to join in the waitlist");
+        mRepository = InitDB.getRepository(application);
 
         mTextCheckState = new MutableLiveData<>();
-        String number = Waitlist.getInstance().getCategory() + Waitlist.getInstance().getId();
+        String number = mRepository.getWaitlist().getValue().getCategory() +
+                mRepository.getWaitlist().getValue().getId();
         String result = "Your number is:\n\n" +
                  number + "\n\n" +
-                "There are " + Waitlist.getInstance().getRank() +
+                "There are " + mRepository.getWaitlist().getValue().getRank() +
                 " more guests in front of you";
         mTextCheckState.setValue(result);
     }
@@ -46,6 +48,10 @@ public class WaitlistViewModel extends ViewModel {
         return mTextCheckState;
     }
 
+    public int getWaitId() { return mRepository.getWaitlist().getValue().getId(); }
+
+    public String getWaitCategory() { return mRepository.getWaitlist().getValue().getCategory(); }
+
     public NetworkUtils.RESPONSE_CODE waitlistServer(String guestNumber, String lastname) {
         FormBody body = new FormBody.Builder()
                 .add("no_of_guests", guestNumber)
@@ -56,7 +62,7 @@ public class WaitlistViewModel extends ViewModel {
                 .post(body)
                 .build();
         Log.e("status: ", "request sent");
-        return NetworkUtils.getResponse(request, Waitlist.class);
+        return NetworkUtils.getResponse(request, WaitlistBuffer.class, mRepository);
     }
 
     public NetworkUtils.RESPONSE_CODE waitStateServer(int waitId, String waitCategory) {
@@ -69,6 +75,20 @@ public class WaitlistViewModel extends ViewModel {
                 .post(body)
                 .build();
         Log.e("status: ", "request sent");
-        return NetworkUtils.getResponse(request, Waitlist.class);
+        return NetworkUtils.getResponse(request, WaitlistBuffer.class, mRepository);
+    }
+
+    public static class Factory extends ViewModelProvider.NewInstanceFactory {
+        private Application mApplication;
+
+        public Factory(Application application) {
+            mApplication = application;
+        }
+
+        @NotNull
+        @Override
+        public <T extends ViewModel> T create(Class<T> modelClass) {
+            return (T) new WaitlistViewModel(mApplication);
+        }
     }
 }

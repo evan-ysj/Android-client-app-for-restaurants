@@ -1,10 +1,18 @@
 package com.example.myapplication.ui.personal;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myapplication.InitDB;
 import com.example.myapplication.model.User;
+import com.example.myapplication.service.Repository;
+
+import org.jetbrains.annotations.NotNull;
 
 public class PersonalViewModel extends ViewModel {
 
@@ -13,24 +21,10 @@ public class PersonalViewModel extends ViewModel {
     private final MutableLiveData<String> firstnameKey = new MutableLiveData<>("Firstname");
     private final MutableLiveData<String> lastnameKey = new MutableLiveData<>("Lastname");
     private final MutableLiveData<String> emailKey = new MutableLiveData<>("Email");
-    private MutableLiveData<String> usernameValue;
-    private MutableLiveData<String> firstnameValue;
-    private MutableLiveData<String> lastnameValue;
-    private MutableLiveData<String> emailValue;
+    private final Repository mRepository;
 
-    public PersonalViewModel() {
-        usernameValue = new MutableLiveData<>();
-        firstnameValue = new MutableLiveData<>();
-        lastnameValue = new MutableLiveData<>();
-        emailValue = new MutableLiveData<>();
-        setValues();
-    }
-
-    public void setValues() {
-        usernameValue.setValue(User.getInstance().getUsername());
-        firstnameValue.setValue(User.getInstance().getFirstname());
-        lastnameValue.setValue(User.getInstance().getLastname());
-        emailValue.setValue(User.getInstance().getEmail());
+    public PersonalViewModel(@NonNull Application application) {
+        mRepository = InitDB.getRepository(application);
     }
 
     public LiveData<String> getText() {
@@ -41,31 +35,35 @@ public class PersonalViewModel extends ViewModel {
         return usernameKey;
     }
 
-    public LiveData<String> getUsernameValue() {
-        return usernameValue;
-    }
-
     public LiveData<String> getFirstnameKey() {
         return firstnameKey;
-    }
-
-    public LiveData<String> getFirstnameValue() {
-        return firstnameValue;
     }
 
     public LiveData<String> getLastnameKey() {
         return lastnameKey;
     }
 
-    public LiveData<String> getLastnameValue() {
-        return lastnameValue;
-    }
-
     public LiveData<String> getEmailKey() {
         return emailKey;
     }
 
-    public LiveData<String> getEmailValue() {
-        return emailValue;
+    public LiveData<User> getUser() { return mRepository.getUser(); }
+
+    public void clearUser() {
+        mRepository.clearUser();
+    }
+
+    public static class Factory extends ViewModelProvider.NewInstanceFactory {
+        private Application mApplication;
+
+        public Factory(Application application) {
+            mApplication = application;
+        }
+
+        @NotNull
+        @Override
+        public <T extends ViewModel> T create(Class<T> modelClass) {
+            return (T) new PersonalViewModel(mApplication);
+        }
     }
 }

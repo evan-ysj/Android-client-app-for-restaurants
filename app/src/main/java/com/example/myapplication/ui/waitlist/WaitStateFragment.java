@@ -21,7 +21,8 @@ public class WaitStateFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         waitlistViewModel =
-                new ViewModelProvider(this).get(WaitlistViewModel.class);
+                new ViewModelProvider(this, new WaitlistViewModel.Factory(requireActivity().getApplication()))
+                        .get(WaitlistViewModel.class);
         View root = inflater.inflate(R.layout.fragment_wait_state, container, false);
         final TextView textView = root.findViewById(R.id.text_wait_state);
         waitlistViewModel.getTextCheckState().observe(getViewLifecycleOwner(), s -> textView.setText(s));

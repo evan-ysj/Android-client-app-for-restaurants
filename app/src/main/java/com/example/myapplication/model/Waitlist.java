@@ -16,17 +16,23 @@ public class Waitlist {
 
     public static Waitlist getInstance() { return InstanceHolder.INSTANCE; }
 
-    public int getId() { return this.id; }
+    public int getId() {
+        return id;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public int getRank() {
+        return rank;
+    }
 
-    public String getCategory() { return this.category; }
+    public String getCategory() {
+        return category;
+    }
 
-    public void setCategory(String category) { this.category = category; }
-
-    public int getRank() { return this.rank; }
-
-    public void setRank(int rank) { this.rank = rank; }
+    public void update(int id, String category, int rank) {
+        this.id = id;
+        this.category = category;
+        this.rank = rank;
+    }
 
     public void clear() {
         this.id = -1;
