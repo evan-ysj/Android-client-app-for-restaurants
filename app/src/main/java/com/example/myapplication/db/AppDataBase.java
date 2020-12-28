@@ -2,6 +2,7 @@ package com.example.myapplication.db;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -17,10 +18,11 @@ import com.example.myapplication.DataGenerator;
 import com.example.myapplication.db.converter.DateConverter;
 import com.example.myapplication.db.dao.ReserveHistoryDao;
 import com.example.myapplication.db.entity.ReserveHistoryEntity;
+import com.example.myapplication.model.User;
 
 import java.util.List;
 
-@Database(entities = {ReserveHistoryEntity.class}, version = 2)
+@Database(entities = {ReserveHistoryEntity.class}, version = 1)
 @TypeConverters(DateConverter.class)
 public abstract class AppDataBase extends RoomDatabase {
 
@@ -45,20 +47,25 @@ public abstract class AppDataBase extends RoomDatabase {
     }
 
     private static AppDataBase buildDatabase(final Context context) {
-        return Room.databaseBuilder(context, AppDataBase.class, DATABASE_NAME)
-                .addCallback(new Callback() {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
-                    @Override
-                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                        super.onCreate(db);
-                        AppDataBase dataBase = AppDataBase.getInstance(context);
-                        List<ReserveHistoryEntity> reservations = DataGenerator.generateReservations();
-                        insertData(dataBase, reservations);
-                        dataBase.setDatabaseCreated();
-                    }
-                })
-                .addMigrations()
+        instance = Room.databaseBuilder(context, AppDataBase.class, DATABASE_NAME)
+                .fallbackToDestructiveMigration()
                 .build();
+        //generateData();
+        return instance;
+    }
+
+    private static void generateData() {
+        Thread t = new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void run() {
+                List<ReserveHistoryEntity> reservations = DataGenerator.generateReservations();
+                Log.e("adapter: ", "size of list " + reservations.size());
+                insertData(instance, reservations);
+                instance.setDatabaseCreated();
+            }
+        });
+        t.start();
     }
 
     private void updateDatabaseCreated(final Context context) {

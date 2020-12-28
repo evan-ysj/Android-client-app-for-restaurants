@@ -50,7 +50,13 @@ public class PersonalFragment extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                personalViewModel.clearUser();
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        personalViewModel.clearDate();
+                    }
+                });
+                t.start();
                 Navigation.findNavController(root).navigate(R.id.navigation_home);
             }
         });

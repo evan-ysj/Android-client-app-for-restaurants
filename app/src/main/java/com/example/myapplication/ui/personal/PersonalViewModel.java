@@ -1,8 +1,10 @@
 package com.example.myapplication.ui.personal;
 
 import android.app.Application;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -49,8 +51,9 @@ public class PersonalViewModel extends ViewModel {
 
     public LiveData<User> getUser() { return mRepository.getUser(); }
 
-    public void clearUser() {
+    public void clearDate() {
         mRepository.clearUser();
+        mRepository.clearReservation();
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {

@@ -12,9 +12,12 @@ import java.util.List;
 
 @Dao
 public interface ReserveHistoryDao {
-    @Query("select * from reservation where username = :username")
-    LiveData<List<ReserveHistoryEntity>> loadReserveHistory(String username);
+    @Query("select * from reservation/* where username = :username*/ order by rsv_number desc")
+    LiveData<List<ReserveHistoryEntity>> loadReserveHistory();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<ReserveHistoryEntity> reservations);
+
+    @Query("delete from reservation")
+    int clearAll();
 }

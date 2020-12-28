@@ -11,8 +11,11 @@ import com.example.myapplication.db.entity.ReserveHistoryEntity;
 import com.example.myapplication.model.ReserveHistory;
 import com.example.myapplication.model.User;
 import com.example.myapplication.model.Waitlist;
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class Repository {
@@ -20,18 +23,18 @@ public class Repository {
     private MutableLiveData<User> mUser;
     private MutableLiveData<Waitlist> mWaitlist;
     private final AppDataBase mDatabase;
-    private MediatorLiveData<List<ReserveHistoryEntity>> mObervableReservations;
+    private MediatorLiveData<List<ReserveHistoryEntity>> mObservableReservations;
     private static Repository instance;
 
     private Repository(AppDataBase dataBase) {
         mUser = new MutableLiveData<>(User.getInstance());
         mWaitlist = new MutableLiveData<>(Waitlist.getInstance());
         mDatabase = dataBase;
-        mObervableReservations = new MediatorLiveData<>();
-        mObervableReservations.addSource(mDatabase.reserveHistoryDao().loadReserveHistory(getUser().getValue().getUsername()),
+        mObservableReservations = new MediatorLiveData<>();
+        mObservableReservations.addSource(mDatabase.reserveHistoryDao().loadReserveHistory(),
                 reservations -> {
                     if(mDatabase.getDatabaseCreated().getValue() != null) {
-                        mObervableReservations.postValue(reservations);
+                        mObservableReservations.postValue(reservations);
                     }
                 });
     }
@@ -47,31 +50,53 @@ public class Repository {
         return instance;
     }
 
-    public void updateUser(int userid, String username, String firstname, String lastname, String email) {
-        User.getInstance().update(userid, username, firstname, lastname, email);
+    public void updateUser(DataBuffer userBuffer) {
+        UserBuffer buffer = (UserBuffer) userBuffer;
+        User.getInstance().update(buffer.getUserid(),
+                                  buffer.getUsername(),
+                                  buffer.getFirstname(),
+                                  buffer.getLastname(),
+                                  buffer.getEmail());
         mUser.postValue(User.getInstance());
     }
 
-    public void updateWaitlist(int waitId, String waitCategory, int waitRank) {
-        Waitlist.getInstance().update(waitId, waitCategory, waitRank);
+    public void updateWaitlist(DataBuffer waitlistBuffer) {
+        WaitlistBuffer buffer = (WaitlistBuffer) waitlistBuffer;
+        Waitlist.getInstance().update(buffer.getWaitId(),
+                                      buffer.getWaitCategory(),
+                                      buffer.getWaitRank());
         mWaitlist.postValue(Waitlist.getInstance());
     }
 
+    public void updateReservation(DataBuffer reservationBuffer) {
+        ReservationBuffer buffer = (ReservationBuffer) reservationBuffer;
+        Type collectionType = new TypeToken<List<ReserveHistoryEntity>>(){}.getType();
+        Gson gson = new Gson();
+        try {
+            List<ReserveHistoryEntity> reservations = gson.fromJson(buffer.getReservationList(), collectionType);
+            mDatabase.reserveHistoryDao().insertAll(reservations);
+        } catch (Exception exception) {
+            Log.e("repo-exception: ", exception.toString());
+        }
+    }
+
     public MutableLiveData<User> getUser() {
-        mUser.postValue(User.getInstance());
         return mUser;
     }
 
     public MutableLiveData<Waitlist> getWaitlist() {
-        mWaitlist.postValue(Waitlist.getInstance());
         return mWaitlist;
     }
 
     public LiveData<List<ReserveHistoryEntity>> getReservations() {
-        return mObervableReservations;
+        return mObservableReservations;
     }
 
     public void clearUser() {
         mUser.getValue().clear();
+    }
+
+    public void clearReservation() {
+        mDatabase.reserveHistoryDao().clearAll();
     }
 }

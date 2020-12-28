@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -25,11 +26,11 @@ public class DataGenerator {
         List<ReserveHistoryEntity> reservations = new ArrayList<>();
         for(int i = 0; i < 10; ++i) {
             ReserveHistoryEntity reservation = new ReserveHistoryEntity();
-            reservation.setDiningDate(randomDateTime(-3, 3));
-            reservation.setIsExpired(true);
-            reservation.setNumberOfGuest(random.nextInt(10));
-            reservation.setReserveId(i + 1);
-            reservation.setUsername("ysj");
+            reservation.setDate(randomDateTime(-3, 3));
+            reservation.setExpired(true);
+            reservation.setNo_of_guests(random.nextInt(10));
+            reservation.setRsv_number(i + 1);
+            reservations.add(reservation);
         }
         return reservations;
     }

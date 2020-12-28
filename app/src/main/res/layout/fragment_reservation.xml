@@ -31,8 +31,7 @@
         app:layout_constraintStart_toEndOf="@+id/text_reservation"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -46,10 +45,11 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/bottom"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

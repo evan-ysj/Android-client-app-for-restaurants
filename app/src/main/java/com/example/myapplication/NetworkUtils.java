@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.myapplication.service.DataBuffer;
 import com.example.myapplication.service.Repository;
+import com.example.myapplication.service.ReservationBuffer;
 import com.example.myapplication.service.UserBuffer;
 import com.example.myapplication.service.WaitlistBuffer;
 import com.google.gson.Gson;
@@ -26,7 +27,7 @@ public class NetworkUtils {
         FAIL,
         SUCCESS
     }
-    public static String MESSAGE = "empty";
+    public static String MESSAGE = "Network Error!";
     public static int CODE = 0;
     public static final ReentrantLock lock = new ReentrantLock();
 
@@ -46,13 +47,18 @@ public class NetworkUtils {
                 final String data = response.body().string();
                 Log.e("status: ", data);
                 Gson gson = new Gson();
-                DataBuffer buffer = new DataBuffer();
+                DataBuffer dataBuffer = null;
                 if(bufferClass == UserBuffer.class) {
-                    buffer = gson.fromJson(data, UserBuffer.class);
+                    dataBuffer = gson.fromJson(data, UserBuffer.class);
+                    repository.updateUser(dataBuffer);
                 } else if(bufferClass == WaitlistBuffer.class) {
-                    buffer = gson.fromJson(data, WaitlistBuffer.class);
+                    dataBuffer = gson.fromJson(data, WaitlistBuffer.class);
+                    repository.updateWaitlist(dataBuffer);
+                } else if(bufferClass == ReservationBuffer.class) {
+                    dataBuffer = gson.fromJson(data, ReservationBuffer.class);
+                    repository.updateReservation(dataBuffer);
                 }
-                buffer.update(repository);
+                if(dataBuffer != null) dataBuffer.updateNetworkState();
                 if(CODE == 200) {
                     Log.e("status: ", MESSAGE);
                     responseCode[0] = RESPONSE_CODE.SUCCESS;

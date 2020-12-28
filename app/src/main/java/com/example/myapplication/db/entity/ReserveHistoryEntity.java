@@ -9,53 +9,52 @@ import com.example.myapplication.model.ReserveHistory;
 import java.util.Date;
 
 @Entity(tableName = "reservation",
-        indices = {@Index("reserveId")})
+        indices = {@Index("rsv_number")})
 public class ReserveHistoryEntity implements ReserveHistory {
     @PrimaryKey
-    private int reserveId;
-    private int numberOfGuest;
-    private Date diningDate;
-    private Boolean isExpired;
-    private String username;
+    private int rsv_number;
+    private int no_of_guests;
+    private Date date;
+    private Boolean expired;
 
-    @Override
-    public int getReserveId() {
-        return reserveId;
+    public int getRsv_number() {
+        return rsv_number;
     }
 
-    public void setReserveId(int reserveId) {
-        this.reserveId = reserveId;
+    public void setRsv_number(int reserveId) {
+        this.rsv_number = reserveId;
     }
 
-    @Override
-    public int getNumberOfGuest() {
-        return numberOfGuest;
+    public int getNo_of_guests() {
+        return no_of_guests;
     }
 
-    public void setNumberOfGuest(int numberOfGuest) {
-        this.numberOfGuest = numberOfGuest;
+    public void setNo_of_guests(int numberOfGuest) {
+        this.no_of_guests = numberOfGuest;
     }
 
-    @Override
-    public Date getDiningDate() {
-        return diningDate;
+    public Date getDate() {
+        return date;
     }
 
-    public void setDiningDate(Date diningDate) {
-        this.diningDate = diningDate;
+    public void setDate(Date diningDate) {
+        this.date = diningDate;
     }
 
-    @Override
-    public Boolean getIsExpired() {
-        return isExpired;
+    public Boolean getExpired() {
+        return expired;
     }
 
-    public void setIsExpired(Boolean isExpired) {
-        this.isExpired = isExpired;
+    public void setExpired(Boolean isExpired) {
+        this.expired = isExpired;
     }
 
-    @Override
-    public String getUsername() { return username; }
-
-    public void setUsername(String username) { this.username = username; }
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(date.toString()).append("\n");
+        sb.append(no_of_guests).append("\n");
+        String expire = expired ? "Expired" : "Valid";
+        sb.append(expire);
+        return sb.toString();
+    }
 }

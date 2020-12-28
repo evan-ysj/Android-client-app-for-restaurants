@@ -10,24 +10,6 @@ public class UserBuffer extends DataBuffer {
     private String lastname;
     private String email;
 
-    @Override
-    public String getMessage() {
-        return this.message;
-    }
-
-    public void setMessage(String code) {
-        this.message = code;
-    }
-
-    @Override
-    public int get_$StatusCode185() {
-        return this._$StatusCode185;
-    }
-
-    public void set_$StatusCode185(int _$StatusCode185) {
-        this._$StatusCode185 = _$StatusCode185;
-    }
-
     public int getUserid() {
         return this.userid;
     }
@@ -66,12 +48,5 @@ public class UserBuffer extends DataBuffer {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public void update(Repository repository) {
-        repository.updateUser(userid, username, firstname, lastname, email);
-        NetworkUtils.MESSAGE = getMessage();
-        NetworkUtils.CODE = get_$StatusCode185();
     }
 }
