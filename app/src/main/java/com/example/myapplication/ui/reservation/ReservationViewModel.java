@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.reservation;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.os.Build;
 import android.util.Log;
@@ -15,12 +16,16 @@ import com.example.myapplication.InitDB;
 import com.example.myapplication.NetworkUtils;
 import com.example.myapplication.db.entity.ReserveHistoryEntity;
 import com.example.myapplication.model.User;
+import com.example.myapplication.service.DataBuffer;
 import com.example.myapplication.service.Repository;
 import com.example.myapplication.service.ReservationBuffer;
 import com.example.myapplication.service.UserBuffer;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.FormBody;
@@ -31,7 +36,7 @@ public class ReservationViewModel extends ViewModel {
     private final MutableLiveData<String> mTextReserveRecord;
     private final MutableLiveData<String> mTextReserveTable;
     private final Repository mRepository;
-    private final LiveData<List<ReserveHistoryEntity>> mReservations;
+    private LiveData<List<ReserveHistoryEntity>> mReservations;
 
     public ReservationViewModel(@NonNull Application application) {
         mTextReserveRecord = new MutableLiveData<>();
@@ -68,6 +73,33 @@ public class ReservationViewModel extends ViewModel {
                 .build();
         Log.e("status: ", "request sent");
         return NetworkUtils.getResponse(request, ReservationBuffer.class, mRepository);
+    }
+
+    public NetworkUtils.RESPONSE_CODE bookingServer(int numberOfGuests, Date diningDate) {
+        String username = mRepository.getUser().getValue().getUsername();
+        if(username == null || username.isEmpty())
+            return NetworkUtils.RESPONSE_CODE.FAIL;
+        @SuppressLint("SimpleDateFormat") FormBody body = new FormBody.Builder()
+                .add("username", username)
+                .add("no_of_guests", String.valueOf(numberOfGuests))
+                .add("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(diningDate))
+                .build();
+        final Request request = new Request.Builder()
+                .url(NetworkUtils.SERVER_URL + "/mobile_booktable/")
+                .post(body)
+                .build();
+        Log.e("status: ", "request sent");
+        return NetworkUtils.getResponse(request, DataBuffer.class, mRepository);
+    }
+
+    public void invalidateCache() {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mRepository.clearReservation();
+            }
+        });
+        t.start();
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {

@@ -19,5 +19,5 @@ public interface ReserveHistoryDao {
     void insertAll(List<ReserveHistoryEntity> reservations);
 
     @Query("delete from reservation")
-    int clearAll();
+    void clearAll();
 }

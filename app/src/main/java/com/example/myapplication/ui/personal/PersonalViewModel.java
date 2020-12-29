@@ -51,7 +51,7 @@ public class PersonalViewModel extends ViewModel {
 
     public LiveData<User> getUser() { return mRepository.getUser(); }
 
-    public void clearDate() {
+    public void clearData() {
         mRepository.clearUser();
         mRepository.clearReservation();
     }

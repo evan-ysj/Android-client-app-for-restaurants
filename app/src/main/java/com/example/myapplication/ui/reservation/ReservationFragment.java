@@ -23,6 +23,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.db.entity.ReserveHistoryEntity;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ReservationFragment extends Fragment {
 
@@ -59,10 +60,11 @@ public class ReservationFragment extends Fragment {
             Toast.makeText(getActivity(), "Please sign in!", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(view).navigate(R.id.action_navigation_reservation_to_loginFragment);
         }
-        subscribeUi(reservationViewModel.getReservations());
-        if(reservationViewModel.getUser().getValue().getUserId() != -1 &&
-                reservationViewModel.getReservations().getValue() == null)
+        else if(reservationViewModel.getReservations().getValue() == null ||
+                reservationViewModel.getReservations().getValue().size() == 0) {
             loadReservations();
+        }
+        subscribeUi(reservationViewModel.getReservations());
     }
 
     private void subscribeUi(LiveData<List<ReserveHistoryEntity>> liveData) {
@@ -82,7 +84,7 @@ public class ReservationFragment extends Fragment {
         NetworkUtils.RESPONSE_CODE responseCode = reservationViewModel.loadData();
         if(responseCode == NetworkUtils.RESPONSE_CODE.SUCCESS) {
             Toast.makeText(getActivity(), "Load reservation history successfully!", Toast.LENGTH_SHORT).show();
-            Log.e("status:", "login success!");
+            Log.e("status:", "success!");
         } else {
             if(responseCode == NetworkUtils.RESPONSE_CODE.NO_RESPONSE) {
                 Toast.makeText(getActivity(), "Server no response!!", Toast.LENGTH_SHORT).show();

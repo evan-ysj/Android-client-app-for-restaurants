@@ -53,7 +53,7 @@ public class PersonalFragment extends Fragment {
                 Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        personalViewModel.clearDate();
+                        personalViewModel.clearData();
                     }
                 });
                 t.start();

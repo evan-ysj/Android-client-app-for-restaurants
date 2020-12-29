@@ -36,7 +36,7 @@ public class DataGenerator {
     }
 
     /**
-     * 取范围日期的随机日期时间,不含边界
+     * Get random range of local date
      * @param startDay
      * @param endDay
      * @return
@@ -76,7 +76,7 @@ public class DataGenerator {
     }
 
     /**
-     * 取范围日期的随机日期时间,不含边界
+     * Get random range of zoned date
      * @param startDay
      * @param endDay
      * @return

@@ -51,7 +51,11 @@
         android:id="@+id/navigation_reserve_table"
         android:name="com.example.myapplication.ui.reservation.ReserveTableFragment"
         android:label="@string/title_reserve_table"
-        tools:layout="@layout/fragment_reserve_table" />
+        tools:layout="@layout/fragment_reserve_table" >
+        <action
+            android:id="@+id/action_navigation_reserve_table_to_navigation_reservation"
+            app:destination="@id/navigation_reservation" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_personal"

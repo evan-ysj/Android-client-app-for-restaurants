@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.Application;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.example.myapplication.service.DataBuffer;
@@ -57,6 +58,9 @@ public class NetworkUtils {
                 } else if(bufferClass == ReservationBuffer.class) {
                     dataBuffer = gson.fromJson(data, ReservationBuffer.class);
                     repository.updateReservation(dataBuffer);
+                }
+                else {
+                    dataBuffer = gson.fromJson(data, DataBuffer.class);
                 }
                 if(dataBuffer != null) dataBuffer.updateNetworkState();
                 if(CODE == 200) {

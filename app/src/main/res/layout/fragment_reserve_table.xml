@@ -44,7 +44,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
-        android:hint="@string/hint_date"
+        android:hint="@string/hint_select_date"
         android:inputType="date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

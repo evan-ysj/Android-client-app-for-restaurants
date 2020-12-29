@@ -50,7 +50,7 @@ public class WaitlistFragment extends Fragment {
         tvGuestNumber = root.findViewById(R.id.waitlist_number_of_guest);
         tvLastname = root.findViewById(R.id.waitlist_lastname);
 
-        toast = Toast.makeText(getActivity(), "", Toast.LENGTH_LONG);
+        toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
 
         Button takeNumber = root.findViewById(R.id.waitlist_submit);
         takeNumber.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +133,7 @@ public class WaitlistFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                NavHostFragment.findNavController(current)
+                NavHostFragment.findNavController(WaitlistFragment.this)
                         .navigate(R.id.action_navigation_waitlist_to_navigation_wait_state);
             }
         });
