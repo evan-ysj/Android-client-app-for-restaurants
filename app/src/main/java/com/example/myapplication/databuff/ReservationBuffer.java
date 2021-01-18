@@ -1,8 +1,4 @@
-package com.example.myapplication.service;
-
-import com.example.myapplication.db.entity.ReserveHistoryEntity;
-
-import java.util.List;
+package com.example.myapplication.databuff;
 
 public class ReservationBuffer extends DataBuffer {
     private String reservationList;

@@ -2,11 +2,9 @@ package com.example.myapplication.ui.reservation;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -16,15 +14,13 @@ import com.example.myapplication.InitDB;
 import com.example.myapplication.NetworkUtils;
 import com.example.myapplication.db.entity.ReserveHistoryEntity;
 import com.example.myapplication.model.User;
-import com.example.myapplication.service.DataBuffer;
-import com.example.myapplication.service.Repository;
-import com.example.myapplication.service.ReservationBuffer;
-import com.example.myapplication.service.UserBuffer;
+import com.example.myapplication.databuff.DataBuffer;
+import com.example.myapplication.databuff.Repository;
+import com.example.myapplication.databuff.ReservationBuffer;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

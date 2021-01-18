@@ -9,6 +9,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey01">#cccccc</color>
     <color name="grey02">#eeeeee</color>
-    <color name="grey03">#222222</color>
+    <color name="grey03">#333333</color>
+    <color name="grey04">#111111</color>
     <color name="yellow01">#fac564</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="black_overlay">#66000000</color>
 </resources>

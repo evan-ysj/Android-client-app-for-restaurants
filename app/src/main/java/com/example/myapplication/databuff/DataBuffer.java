@@ -1,8 +1,4 @@
-package com.example.myapplication.service;
-
-import android.app.Application;
-
-import androidx.annotation.NonNull;
+package com.example.myapplication.databuff;
 
 import com.example.myapplication.NetworkUtils;
 import com.google.gson.annotations.SerializedName;

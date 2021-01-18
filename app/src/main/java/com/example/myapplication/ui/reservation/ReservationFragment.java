@@ -1,5 +1,7 @@
 package com.example.myapplication.ui.reservation;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +31,7 @@ public class ReservationFragment extends Fragment {
 
     private ReservationViewModel reservationViewModel;
     private ReserveAdapter reserveAdapter;
+    private SharedPreferences sp;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class ReservationFragment extends Fragment {
                 new ViewModelProvider(this, new ReservationViewModel.Factory(requireActivity().getApplication()))
                         .get(ReservationViewModel.class);
         reserveAdapter = new ReserveAdapter();
+        sp = getActivity().getSharedPreferences(getString(R.string.shared_preference_login), Context.MODE_PRIVATE);
         View root = inflater.inflate(R.layout.fragment_reservation, container, false);
         final TextView textView = root.findViewById(R.id.text_reservation);
         reservationViewModel.getTextReserveRecord().observe(getViewLifecycleOwner(), s -> textView.setText(s));

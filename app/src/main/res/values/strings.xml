@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">EasyDining</string>
     <string name="title_home">Home</string>
     <string name="title_waitlist">Waitlist</string>
     <string name="title_reservation">Reservation</string>
@@ -14,8 +14,15 @@
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="title_wait_state">Waiting Status</string>
     <string name="title_reserve_table">New Reservation</string>
+    <string name="channel_id">CHANNEL_WAIT_LIST</string>
+    <string name="channel_name">Channel_Waitlist</string>
+    <string name="channel_desc">Channel for the wait list service</string>
+    <string name="shared_preference_login">PREFERENCE_FILE_LOGIN</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_login">Sign In</string>
     <string name="title_register">Sign Up</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

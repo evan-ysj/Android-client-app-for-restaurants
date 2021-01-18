@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_navigation_home_to_navigation_reservation"
             app:destination="@id/navigation_reservation" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_wait_state"
+            app:destination="@id/navigation_wait_state" />
     </fragment>
 
     <fragment

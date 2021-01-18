@@ -1,11 +1,9 @@
 package com.example.myapplication.ui.waitlist;
 
 import android.app.Application;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -13,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.InitDB;
 import com.example.myapplication.NetworkUtils;
-import com.example.myapplication.service.Repository;
-import com.example.myapplication.service.WaitlistBuffer;
+import com.example.myapplication.databuff.Repository;
+import com.example.myapplication.databuff.WaitlistBuffer;
 
 import org.jetbrains.annotations.NotNull;
 

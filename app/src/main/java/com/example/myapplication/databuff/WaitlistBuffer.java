@@ -1,9 +1,4 @@
-package com.example.myapplication.service;
-
-import android.util.Log;
-
-import com.example.myapplication.NetworkUtils;
-import com.example.myapplication.model.Waitlist;
+package com.example.myapplication.databuff;
 
 public class WaitlistBuffer extends DataBuffer {
     private int waitId;

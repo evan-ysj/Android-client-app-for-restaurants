@@ -1,21 +1,28 @@
 package com.example.myapplication;
 
-import android.app.Application;
-import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.example.myapplication.service.DataBuffer;
-import com.example.myapplication.service.Repository;
-import com.example.myapplication.service.ReservationBuffer;
-import com.example.myapplication.service.UserBuffer;
-import com.example.myapplication.service.WaitlistBuffer;
+import com.example.myapplication.databuff.DataBuffer;
+import com.example.myapplication.databuff.Repository;
+import com.example.myapplication.databuff.ReservationBuffer;
+import com.example.myapplication.databuff.UserBuffer;
+import com.example.myapplication.databuff.WaitlistBuffer;
 import com.google.gson.Gson;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -30,10 +37,32 @@ public class NetworkUtils {
     }
     public static String MESSAGE = "Network Error!";
     public static int CODE = 0;
-    public static final ReentrantLock lock = new ReentrantLock();
+    private static final List<Cookie> cookieStore = new ArrayList();
 
     public static RESPONSE_CODE getResponse(Request request, Class bufferClass, Repository repository) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder().cookieJar(new CookieJar() {
+            @Override
+            public void saveFromResponse(@NotNull HttpUrl url, @NotNull List<Cookie> cookies) {
+                cookieStore.addAll(cookies);
+                Log.e("cookie: ", cookies.toString());
+            }
+
+            @Override
+            public List<Cookie> loadForRequest(@NotNull HttpUrl url) {
+                List<Cookie> invalid = new ArrayList();
+                List<Cookie> valid = new ArrayList();
+                for(Cookie cookie: cookieStore) {
+                    if(cookie.expiresAt() < System.currentTimeMillis()) {
+                        invalid.add(cookie);
+                    } else if(cookie.matches(url)) {
+                        valid.add(cookie);
+                    }
+                }
+                cookieStore.removeAll(invalid);
+                Log.e("cookie: ", cookieStore.toString());
+                return cookieStore;
+            }
+        }).build();
         final RESPONSE_CODE[] responseCode = {RESPONSE_CODE.PROCESSING};
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -73,8 +102,11 @@ public class NetworkUtils {
                 }
             }
         });
-        // Wait for thread complete; Should add time out later.
+        // Set timeout to 1 second.
+        long start = new Date().getTime();
         while(responseCode[0] == RESPONSE_CODE.PROCESSING) {
+            long end = new Date().getTime();
+            if(end - start > 1000) break;
             Log.e("status", "waiting for process");
         }
         return responseCode[0];

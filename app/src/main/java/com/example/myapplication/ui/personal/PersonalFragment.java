@@ -1,5 +1,7 @@
 package com.example.myapplication.ui.personal;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +17,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.myapplication.R;
-import com.example.myapplication.model.User;
-import com.example.myapplication.service.Repository;
 
 public class PersonalFragment extends Fragment {
 
     private PersonalViewModel personalViewModel;
+    private SharedPreferences sp;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         personalViewModel =
                 new ViewModelProvider(this, new PersonalViewModel.Factory(requireActivity().getApplication()))
                         .get(PersonalViewModel.class);
+        sp = getActivity().getSharedPreferences(getString(R.string.shared_preference_login), Context.MODE_PRIVATE);
         View root = inflater.inflate(R.layout.fragment_personal, container, false);
         final TextView textView = root.findViewById(R.id.text_personal);
         personalViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
@@ -53,6 +55,9 @@ public class PersonalFragment extends Fragment {
                 Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        sp.edit().putString(getString(R.string.hint_username), null)
+                                 .putString(getString(R.string.hint_password), null)
+                                 .apply();
                         personalViewModel.clearData();
                     }
                 });

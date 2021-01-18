@@ -1,5 +1,7 @@
 package com.example.myapplication.ui.waitlist;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -19,6 +22,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.myapplication.NetworkUtils;
 import com.example.myapplication.R;
 import com.example.myapplication.model.Waitlist;
+import com.example.myapplication.service.WaitlistService;
 
 public class WaitlistFragment extends Fragment {
 
@@ -54,6 +58,7 @@ public class WaitlistFragment extends Fragment {
 
         Button takeNumber = root.findViewById(R.id.waitlist_submit);
         takeNumber.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 joinWaitlist();
@@ -69,6 +74,7 @@ public class WaitlistFragment extends Fragment {
         return root;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void joinWaitlist() {
         String tvGuestNumberString = tvGuestNumber.getText().toString().trim();
         String tvLastnameString = tvLastname.getText().toString().trim();
@@ -90,6 +96,7 @@ public class WaitlistFragment extends Fragment {
             toast.show();
             Log.e("status:", "success!");
             navToWaitState();
+            getActivity().startForegroundService(new Intent(getActivity(), WaitlistService.class));
         } else {
             if(responseCode == NetworkUtils.RESPONSE_CODE.NO_RESPONSE) {
                 toast.setText("Server no response!");

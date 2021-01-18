@@ -1,13 +1,9 @@
 package com.example.myapplication;
 
-import android.app.Application;
 import android.content.Context;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import com.example.myapplication.db.AppDataBase;
-import com.example.myapplication.service.Repository;
+import com.example.myapplication.databuff.Repository;
 
 public class InitDB {
 

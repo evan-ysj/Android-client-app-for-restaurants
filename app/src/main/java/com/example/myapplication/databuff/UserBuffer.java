@@ -1,7 +1,4 @@
-package com.example.myapplication.service;
-
-import com.example.myapplication.NetworkUtils;
-import com.example.myapplication.model.User;
+package com.example.myapplication.databuff;
 
 public class UserBuffer extends DataBuffer {
     private int userid;

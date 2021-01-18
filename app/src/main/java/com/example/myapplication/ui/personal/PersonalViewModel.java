@@ -1,10 +1,8 @@
 package com.example.myapplication.ui.personal;
 
 import android.app.Application;
-import android.os.Build;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -12,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.InitDB;
 import com.example.myapplication.model.User;
-import com.example.myapplication.service.Repository;
+import com.example.myapplication.databuff.Repository;
 
 import org.jetbrains.annotations.NotNull;
 

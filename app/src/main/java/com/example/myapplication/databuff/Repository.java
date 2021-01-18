@@ -1,4 +1,4 @@
-package com.example.myapplication.service;
+package com.example.myapplication.databuff;
 
 import android.util.Log;
 
@@ -8,15 +8,12 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.myapplication.db.AppDataBase;
 import com.example.myapplication.db.entity.ReserveHistoryEntity;
-import com.example.myapplication.model.ReserveHistory;
 import com.example.myapplication.model.User;
 import com.example.myapplication.model.Waitlist;
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Repository {
@@ -44,6 +41,7 @@ public class Repository {
         if(instance == null) {
             synchronized (Repository.class) {
                 if(instance == null) {
+                    if(dataBase == null) return null;
                     instance = new Repository(dataBase);
                 }
             }
